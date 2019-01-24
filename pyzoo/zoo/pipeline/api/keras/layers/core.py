@@ -16,6 +16,7 @@
 
 import sys
 
+from bigdl.util.common import INTMIN
 from ..engine.topology import ZooKerasLayer
 
 if sys.version >= '3':
@@ -340,6 +341,26 @@ class Dense(ZooKerasLayer):
                                     **kwargs)
 
 
+class GetShape(ZooKerasLayer):
+    """
+    GetShape gets the value of input_shape.
+    For example, if input_shape = (2, 3, 4),
+    then output will be (2, 3, 4).
+
+    When you use this layer as the first layer of a model, you need to provide the argument
+    input_shape (a shape tuple, does not include the batch dimension).
+
+    # Arguments
+    input_shape: A shape tuple, not including batch.
+    >>> getShape = GetShape(input_shape=(3, 4, 5))
+    creating: createZooKerasGetShape
+    """
+    def __init__(self, input_shape=None, **kwargs):
+        super(GetShape, self).__init__(None,
+                                       list(input_shape) if input_shape else None,
+                                       **kwargs)
+
+
 class SparseDense(ZooKerasLayer):
     """
     SparseDense is the sparse version of layer Dense. SparseDense has two different from Dense:
@@ -475,3 +496,25 @@ class Highway(ZooKerasLayer):
                                       bias,
                                       list(input_shape) if input_shape else None,
                                       **kwargs)
+
+
+class Max(ZooKerasLayer):
+    """
+    Applies a max operation over dimension `dim`
+
+    # Arguments
+    dim: max along this dimension
+    num_input_dims: Optional. If in a batch model, set to the inputDims.
+    return_value: Optional. Config whether return value or indices
+    input_shape: A shape tuple, not including batch.
+
+    >>> max = Max(dim=1, input_shape=(3, 5))
+    creating: createZooKerasMax
+    """
+    def __init__(self, dim, num_input_dims=INTMIN, return_value=True, input_shape=None, **kwargs):
+        super(Max, self).__init__(None,
+                                  dim,
+                                  num_input_dims,
+                                  return_value,
+                                  list(input_shape) if input_shape else None,
+                                  **kwargs)
